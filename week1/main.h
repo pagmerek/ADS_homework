@@ -1,26 +1,42 @@
 #ifndef INSERTIONSORT_MAIN_H
 #define INSERTIONSORT_MAIN_H
 
-class InsertionSort {
-public:
+class Heap {
     int len;
+    int heap_size;
+
+    int left_child(int i) const;
+
+    int right_child(int i) const;
+
+
+public:
+    Heap(const int *table, int len);
+
     int *table;
-    InsertionSort(const int *table, int len);
 
-    void sort() const;
+    int extract_max();
 
-    void read_table() const;
+    void insert_key(int i);
+
+    void build_heap();
+
+    void heapify(int i,int n);
 };
-class MergeSort {
+class Sort {
 public:
     int len;
     int *table;
-    MergeSort(const int *table, int len);
+    Sort(const int *table, int len);
 
-
-    void sort(int l, int r) const;
+    void insertion_sort() const;
 
     void read_table() const;
+
+    void merge_sort(int l, int r) const;
+
+    void heap_sort();
+
 };
 
 #endif //INSERTIONSORT_MAIN_H
