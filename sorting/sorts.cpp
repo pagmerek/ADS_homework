@@ -136,7 +136,7 @@ int cmpfunc(const void *a, const void *b) {
 int main() {
     int table[10000];
     int test_table[10000];
-    std::fstream myfile("../tests.txt");
+    std::fstream myfile("./tests.txt");
     if (myfile.good()) {
         try {
             for (int i = 0; i < 10000; i++) {
