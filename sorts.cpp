@@ -1,4 +1,4 @@
-#include "main.h"
+#include "sorts.h"
 #include <iostream>
 #include <fstream>
 #include <array>

@@ -4,4 +4,4 @@ cmake_minimum_required(VERSION 3.10)
 project(week1)
 
 # add the executable
-add_executable(week1 main.cpp)
+add_executable(ADS_homework sorts.cpp)
