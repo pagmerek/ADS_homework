@@ -1,4 +1,4 @@
-#include "main.h"
+#include "trees.hpp"
 #include <iostream>
 
 BST::node* BST::insert(int value, node* to){
@@ -118,8 +118,8 @@ AVL::node* AVL::remove(int key, node* at){
 
     //pozostało zbalansować drzewo
 
-    if(get_height(at->left)) - get_height(at->right == 2){
-        return (get_height(at->left->left)) - get_height(at->left->right == 1) ? single_left_rotate(at):double_left_rotate(at);
+    if(get_height(at->left) - get_height(at->right) == 2){
+        return (get_height(at->left->left) - get_height(at->left->right) == 1) ? single_left_rotate(at):double_left_rotate(at);
     }
     else if(get_height(at->right) - get_height(at->left) == 2){
         return (get_height(at->right->right)-get_height(at->right->left)==1) ? single_right_rotate(at):double_right_rotate(at);
@@ -127,3 +127,74 @@ AVL::node* AVL::remove(int key, node* at){
     return at;
 }
 
+BRT::node* BRT::get_parent(node* n){
+    return n->parent;
+}
+
+BRT::node* BRT::get_grandparent(node* n){
+    return get_parent(n) ? get_parent(get_parent(n)) : nullptr;
+}
+
+BRT::node* BRT::get_sibling(node* n){
+    return n->parent ? (n->parent->left==n ? n->parent->right : n->parent->left) : nullptr;
+}
+
+BRT::node* BRT::get_uncle(node* n){
+    return get_parent(n) ? get_sibling(get_parent(n)):nullptr;
+}
+
+void BRT::left_rotate(node* n){
+    node* temp = n->right;
+    n->right = temp->left;
+    if(temp->left) temp->left->parent = n;
+    temp->parent = get_parent(n);
+    if(get_parent(n)==nullptr) BRT::root = temp;
+    else if(n == get_parent(n)->left) get_parent(n)->left = temp;
+    else get_parent(n)->right = temp;
+    temp->left = n;
+    n->parent = temp;
+}
+
+void BRT::right_rotate(node* n){
+    node* temp = n->left;
+    n->left = temp->right;
+    if(temp->right) temp->right->parent = n;
+    temp->parent = get_parent(n);
+    if(get_parent(n)==nullptr) BRT::root = temp;
+    else if(n == get_parent(n)->left) get_parent(n)->left = temp;
+    else get_parent(n)->right = temp;
+    temp->right = n;
+    n->parent = temp;
+}
+
+BRT::node* BRT::insert(int to_insert,node* at){
+    node* x = new node;
+    x->key = to_insert;
+    node* temp = nullptr;
+    node* i = BRT::root;
+    while(i != nullptr){
+        temp = i;
+        if(x->key < i->key) i = i->left;
+        else i = i-> right;
+    }
+    at->parent = temp;
+    if(temp == nullptr) BRT::root = x;
+    else if (x->key < temp->key) temp->left = x;
+    else temp->right = x;
+    x->left = x->right = nullptr;
+    x->col = RED;
+    insert_fix(x);
+    return x;
+}
+
+void BRT::insert_fix(node* n){
+    while(get_parent(n)->col = RED){
+        if(get_uncle(n)->col = RED){
+            get_parent(n)->col = BLACK;
+            get_uncle(n)->col = BLACK;
+            get_grandparent(n)->col = RED;
+            right_rotate(get_grandparent(n));
+        }
+    }
+        BRT::root->col = BLACK;
+    }

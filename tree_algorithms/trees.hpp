@@ -43,7 +43,17 @@ class BRT{
     node* get_grandparent(node* n);
     node* get_sibling(node* n);
     node* get_uncle(node* n);
+
+    void left_rotate(node* n);
+    void right_rotate(node* n);
+
+    node* insert(int to_insert, node* at);
+    node* remove(int to_remove, node* from);
+    void insert_fix(node* n);
+    void remove_fix(node* n);
     
+    public:
 
-
+    node* root;
+    
 };
