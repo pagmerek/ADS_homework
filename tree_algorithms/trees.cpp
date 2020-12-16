@@ -167,34 +167,121 @@ void BRT::right_rotate(node* n){
     n->parent = temp;
 }
 
-BRT::node* BRT::insert(int to_insert,node* at){
-    node* x = new node;
-    x->key = to_insert;
+BRT::node* BRT::insert(node* to_insert,int value){
+    if(to_insert == nullptr){
+        to_insert = new node;
+        to_insert->key = value;
+        to_insert->left = to_insert->right = nullptr;
+    }
     node* temp = nullptr;
     node* i = BRT::root;
     while(i != nullptr){
         temp = i;
-        if(x->key < i->key) i = i->left;
+        if(to_insert->key < i->key) i = i->left;
         else i = i-> right;
     }
-    at->parent = temp;
-    if(temp == nullptr) BRT::root = x;
-    else if (x->key < temp->key) temp->left = x;
-    else temp->right = x;
-    x->left = x->right = nullptr;
-    x->col = RED;
-    insert_fix(x);
-    return x;
+    to_insert->parent = temp;
+    if(temp == nullptr) BRT::root = to_insert;
+    else if (to_insert->key < temp->key) temp->left = to_insert;
+    else temp->right = to_insert;
+    to_insert->left = to_insert->right = nullptr;
+    to_insert->col = RED;
+    insert_fix(to_insert);
+    return to_insert;
 }
 
 void BRT::insert_fix(node* n){
     while(get_parent(n)->col = RED){
-        if(get_uncle(n)->col = RED){
-            get_parent(n)->col = BLACK;
-            get_uncle(n)->col = BLACK;
-            get_grandparent(n)->col = RED;
-            right_rotate(get_grandparent(n));
+        if(get_parent(n) == get_grandparent(n)->left){
+            if(get_uncle(n)->col = RED){
+                get_parent(n)->col = BLACK;
+                get_uncle(n)->col = BLACK;
+                get_grandparent(n)->col = RED;
+                right_rotate(get_grandparent(n));
+            }
+            else {
+                if(n == get_parent(n)->right) {
+                    n = get_parent(n);
+                    left_rotate(n);
+                }
+                get_parent(n)->col = BLACK;
+                get_grandparent(n)->col = RED;
+                right_rotate(get_grandparent(n));
+            }
         }
-    }
+        else {
+            if(get_uncle(n) && get_uncle(n)->col == RED){
+                get_parent(n)->col = BLACK;
+                get_uncle(n)->col = BLACK;
+                get_grandparent(n)->col = RED;
+                right_rotate(get_grandparent(n));
+            }
+            else {
+                if(n == get_parent(n)->left) {
+                    n = get_parent(n);
+                    right_rotate(n);
+                }
+                get_parent(n)->col = BLACK;
+                get_grandparent(n)->col = RED;
+                left_rotate(get_grandparent(n));
+            }
+        }
+    } 
         BRT::root->col = BLACK;
     }
+
+BRT::node* BRT::remove(node* n){
+    node* u = nullptr;
+    if(n->right && n->left){
+        node* i = n->right;
+        while(i->left!=nullptr)i=i->left;
+        u = i;
+    }
+    else if(n->right || n->left) u = (n->right)?n->right:n->left;
+    node* parent = n->parent;
+    bool nuBlack = ((u==nullptr or u->col == BLACK) and (n->col == BLACK));
+
+    if(u==nullptr){ // n jest lisciem
+        if(n==BRT::root) 
+            BRT::root = nullptr;
+        else{
+            if(nuBlack){
+                //obydwa są czarne
+                double_black_fix(n);
+            }
+            else{
+                if(get_sibling(n)!=nullptr)
+                    get_sibling(n)->col = RED;
+            }
+
+            if(n == get_parent(n)->right) get_parent(n)->right = nullptr;
+            else get_parent(n)->left = nullptr;
+            }
+        delete n;
+        return u;
+    }
+    if(n->left == nullptr || n->right == nullptr){ //n ma jedno dziecko
+        if(n==BRT::root) {
+            n->key = u->key;
+            n->left = n->right = nullptr;
+            delete n;
+        }
+        else{
+            if(n == get_parent(n)->left) get_parent(n)->left = u;
+            else get_parent(n)->right = u;
+            delete n;
+            u->parent = parent;
+            if(nuBlack){
+                double_black_fix(u);
+            }else{
+                u->col = BLACK;
+            }
+        }
+        return u;
+    }
+    int temp;
+    temp = u->key;
+    u->key = n->key;
+    n->key = temp;
+    BRT::remove(u);
+}

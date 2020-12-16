@@ -31,6 +31,7 @@ class AVL{
     int get_balance(node* of);
 };
 class BRT{
+       public:
     enum color { BLACK, RED };
     struct node{
         node* parent;
@@ -47,12 +48,11 @@ class BRT{
     void left_rotate(node* n);
     void right_rotate(node* n);
 
-    node* insert(int to_insert, node* at);
-    node* remove(int to_remove, node* from);
+    node* insert(node* to_insert,int value);
+    node* remove(node* to_remove);
     void insert_fix(node* n);
-    void remove_fix(node* n);
+    void double_black_fix(node* n);
     
-    public:
 
     node* root;
     
