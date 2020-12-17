@@ -285,3 +285,53 @@ BRT::node* BRT::remove(node* n){
     n->key = temp;
     BRT::remove(u);
 }
+
+void BRT::double_black_fix(node* n){
+    if(n==BRT::root) return;
+    node* sibling = get_sibling(n);
+    node* parent = get_parent(n);
+    
+    if(sibling==nullptr){
+        double_black_fix(parent);
+    }
+    else{
+        if(sibling->col == RED){
+            parent->col = RED;
+            sibling->col = BLACK;
+            if(parent->left==sibling) right_rotate(parent);
+            else left_rotate(parent);
+            double_black_fix(n);
+        } else {
+            if((sibling->left != nullptr and sibling->left->col == RED) or (sibling->right != nullptr and sibling->right->col==RED)){
+                if(sibling->left != nullptr and sibling->left->col == RED){
+                    if(parent->left == sibling){
+                        sibling->left->col = parent->col;
+                        sibling->col = parent->col;
+                        right_rotate(parent);
+                    }else{
+                        sibling->left->col = parent->col;
+                        right_rotate(sibling);
+                        left_rotate(parent);
+                    }
+                } else {
+                    if(parent->left == sibling){
+                        sibling->right->col = parent->col;
+                        left_rotate(sibling);
+                        right_rotate(parent);
+                    }else{
+                        sibling->right->col = sibling->col;
+                        sibling->col = parent->col;
+                        left_rotate(parent);
+                      }
+                }
+            parent->col = BLACK;
+            } else {
+                sibling->col = RED;
+                if(parent->col = BLACK){
+                    double_black_fix(parent);
+                }
+                else parent->col = BLACK;
+            }
+        }
+    }
+}
