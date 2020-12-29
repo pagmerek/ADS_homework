@@ -45,12 +45,11 @@ void Vector::print(){
     }
 }
 int main(){
-
-auto first_structure = Vector(10);
-first_structure.insert(4);
-first_structure.insert(6);
-first_structure.insert(1);
-first_structure.print();
-first_structure.select(4);
-first_structure.print();
+    auto first_structure = Vector(10);
+    first_structure.insert(4);
+    first_structure.insert(6);
+    first_structure.insert(1);
+    first_structure.print();
+    first_structure.select(4);
+    first_structure.print();
 }
