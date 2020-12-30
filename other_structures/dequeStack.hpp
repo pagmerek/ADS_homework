@@ -1,4 +1,4 @@
-
+//1.29
 class dequeStack{
     private:
     struct num{
