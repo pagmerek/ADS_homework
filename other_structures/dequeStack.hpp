@@ -24,4 +24,5 @@ class dequeStack{
    void pop();
    bool search(int num);
    void del(int num);
+   void print();
 };
